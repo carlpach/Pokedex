@@ -1,0 +1,84 @@
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(243, 243, 243);
+}
+
+ol {
+    list-style-type: none;
+}
+
+
+.b-title {
+    text-align: center;
+}
+
+
+.b-gallery {
+    margin: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+
+}
+
+.b-pokemon {
+    text-align: center;
+    padding: 20px 10px;
+    width: 20%;
+    background-color: rgb(179, 179, 179);
+    color: white;
+    border: 10px solid;
+    border-radius: 20px;
+
+}
+
+.b-button {
+
+    font-size: 15px;
+    padding: 10px 40px;
+    color: white;
+    border: 0;
+    background-color: rgb(165, 165, 165);
+    z-index: 1;
+    border-radius: 12px;
+}
+
+.b-filterColors {
+    display: flex;
+
+}
+
+.b-colorpoint {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+
+.b-buttonFix {
+    position: fixed;
+    left: 48%;
+    bottom: 0;
+    margin-bottom: 30px;
+    padding: 10px 40px;
+
+    border: 4px solid;
+	border-color: darkmagenta magenta;
+	outline: 4px ridge cyan;
+	outline-offset: 4px;
+    z-index: 1;
+}
+
+.b-filter {
+    margin: 30px;
+    width: 65%;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: center;
+
+}
+

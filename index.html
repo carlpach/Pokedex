@@ -11,11 +11,20 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="">Pokédex</h1>
-        <ol class="" id="pokedex"></ol>
-    </div>
-    <header class="b.header">
+        <h1 class="b-title">Pokédex</h1>
+        <input type="text" class="b-input">
+        <label for="cars">Choose a filter:</label>
+        <select name="filters" id="" class="b-filtersDropdwn">
+            <option value="type" class="">by type</option>
+            <option value="habitat" class="">by habitat</option>
 
-    </header>
+        </select>
+        <div class="b-filter" id="filter"></div>
+        <div class="b-filter" id="filterColor"></div>
+        <button class="b-buttonClear">Clear</button>
+        <ol class="b-gallery" id="pokedex">
+
+        </ol>
+    </div>
 </body>
 </html>
