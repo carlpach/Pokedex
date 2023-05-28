@@ -3,11 +3,14 @@ const colorsUrl = "https://pokeapi.co/api/v2/pokemon-color";
 const habitatsUrl = "https://pokeapi.co/api/v2/pokemon-habitat";
 
 const olPokedex$$ = document.querySelector("#pokedex");
-const divFilterTyp$$ = document.querySelector("#filter");
-const inputSearch$$ = document.querySelector(".b-input");
-const buttonClear$$ = document.querySelector(".b-buttonClear");
+const divFilterTyp$$ = document.querySelector("#filterText");
+const inputSearch$$ = document.querySelector(".b-input__bar");
+const buttonClear$$ = document.querySelector("#buttonClear");
 const dropDown$$ = document.querySelector(".b-filtersDropdwn");
 const filterColor$$ = document.querySelector("#filterColor");
+const modal$$ = document.querySelector(".b-modal-hidden");
+const overlay$$ = document.querySelector(".b-overlay-hidden");
+let pokemonsFiltered = [];
 
 const init = async () => {
     const res = await fetch(baseUrl);
@@ -21,15 +24,19 @@ const init = async () => {
     }
 
     const pokemons = createPokemonObj(pokemonsList);
+    pokemonsFiltered = pokemons;
 
     // get colors and its species
     try { 
         const resColor = await fetch (colorsUrl);
         const resColorJson = await resColor.json();
+        console.log(resColorJson);
         for (const color of resColorJson.results) {
             const resColorPkm = await fetch (color.url);
             const resColorPkmJson = await resColorPkm.json();
-            printAddColors("color", color, resColorPkmJson, pokemons);
+            console.log(color);
+            addProperty("color", color, resColorPkmJson, pokemons);
+            printColors(color, pokemons);
         }
     } catch (error) {
         console.log(error);
@@ -43,7 +50,7 @@ const init = async () => {
         for (const habit of resHabitJson.results) {
             const resHabitPkm = await fetch (habit.url);
             const resHabitPkmJson = await resHabitPkm.json();
-            printAddColors("habitat", habit, resHabitPkmJson, pokemons);
+            addProperty("habitat", habit, resHabitPkmJson, pokemons);
         }
     } catch (error) {
         console.log(error);
@@ -64,7 +71,9 @@ const init = async () => {
     });
 
     printPropFilter("type", pokemons); 
+    
     printPokemon(pokemons);
+
 
     buttonClear$$.addEventListener("click", () => {
         printPokemon(pokemons);
@@ -84,20 +93,23 @@ const createPokemonObj = (pokemonsList) => {
         );
     return pokemons;
 }
-const printAddColors = (propName, prop, resColorPkmJson, pokemons) => {
+const addProperty = (propName, prop, resColorPkmJson, pokemons) => {
 
     pkmSpecies = resColorPkmJson.pokemon_species.map((specie) => specie.name);
 
     for (const pkm of pokemons) {
         if (pkmSpecies.includes(pkm.name)) {
-            console.log(prop);
+            //console.log(prop);
             pkm[propName] = prop.name;
         }
     }
+}
+
+const printColors = (prop, pokemons) => {
 
     //add filter div
     const colordiv$$ = document.createElement("div");
-    colordiv$$.classList.add("b-colorpoint");
+    colordiv$$.classList.add("b-filter__colorPoint");
     colordiv$$.style.backgroundColor = prop.name;
     filterColor$$.appendChild(colordiv$$);
 
@@ -106,22 +118,29 @@ const printAddColors = (propName, prop, resColorPkmJson, pokemons) => {
     });
 }
 
-printPokemon = (pokemons) => {
+const printPokemon = (pokemons) => {
     olPokedex$$.innerHTML = "";
+
+    addTransition(olPokedex$$);
+    
     for (const pokem of pokemons) {
         const divPokemon$$ = document.createElement("li");
-        divPokemon$$.classList.add("b-pokemon");
+        divPokemon$$.classList.add("b-gallery__pokemon");
         divPokemon$$.style.borderColor = pokem.color;
-        divPokemon$$.innerHTML = `<div class=""># ${pokem.id}</div>
+        console.log(divPokemon$$.style.background);
+        //divPokemon$$.style.backgroundColor = pokem.color;
+        divPokemon$$.innerHTML = `<div class="b-gallery__Pkmnumber"># ${pokem.id}</div>
                                     <img src="${pokem.image}" alt="" class="">
                                     <h2 class="">${pokem.name}</h2>
-                                    <h3 class="">${pokem.type}</h3>`
+                                    <h3 class="b-gallery__PkmType">${pokem.type}</h3>`
         olPokedex$$.appendChild(divPokemon$$)
+
+        divPokemon$$.addEventListener("click", () => openModalPkm(pokem))
     }
 }
 
 const printPropFilter = (propName, pokemons) => {
-    console.log(pokemons);
+
     divFilterTyp$$.innerHTML = "";
     const typesPkm = pokemons.map((item) => (
             item[propName].split(", ")
@@ -135,7 +154,10 @@ const printPropFilter = (propName, pokemons) => {
         typButt$$.textContent = typ;
         divFilterTyp$$.appendChild(typButt$$);
 
-        typButt$$.addEventListener("click", () => {handlerClickType(propName, pokemons)});
+        typButt$$.addEventListener("click", () => {
+            typButt$$.style.backgroundColor = "grey";
+            handlerClickType( typButt$$, propName, pokemons)
+        });
 
     }  
     
@@ -159,12 +181,45 @@ const handlerInputSearch = (pokemons) => {
     printPokemon(pokemonsFiltered);
 }
 
-const handlerClickType = (propName, pokemons) => {
+const handlerClickType = (typButt$$, propName, pokemons) => {
     let propValName = event.target.innerHTML;
     console.log(propValName);
     pokemonsFiltered = pokemons.filter((pokem) => pokem[propName].includes(propValName))
-    console.log(pokemonsFiltered);
     printPokemon(pokemonsFiltered);
+    typButt$$.addEventListener("click", () => {
+        typButt$$.style.backgroundColor = "grey";
+        handlerClickType( typButt$$, propName, pokemonsFiltered);
+    });
 }
+
+// hide modal and overlay
+window.onclick = function(event) {
+    if (event.target == overlay$$) {
+        overlay$$.style.display = "none";
+        modal$$.style.display = "none";
+    }
+  }
+
+function addTransition(div$$) {
+    div$$.classList.add("b-transition")
+setTimeout(() => {
+    div$$.classList.remove("b-transition")
+}, 1000)
+}
+
+const openModalPkm = (pokem) => {
+    addTransition(modal$$);
+
+    modal$$.style.display = "flex";
+    modal$$.style.borderColor = pokem.color;
+    overlay$$.style.display = "flex";
+    modal$$.innerHTML = `<h3 class="b-gallery__label">Weight</h3>
+                        <h4 class="">${pokem.weight} Kg</h4>
+                        <h3 class="b-gallery__label">Height</h3>
+                        <h4 class="">${pokem.height} cms</h4>
+                        <h3 class="b-gallery__label">Abilities</h3>
+                        <h4 class="">${pokem.abilities}</h4>`
+}
+
 
 init();
