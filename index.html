@@ -5,26 +5,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="pokedex.js" defer></script>
-    <link rel="stylesheet" href="styles.css" class="">
+    <link rel="stylesheet" href="./styles/general.css" class="">
     <link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet" />
-    <title>Pokedex</title>
+    <title>Pokédex</title>
 </head>
 <body>
     <div class="container">
-        <h1 class="b-title">Pokédex</h1>
-        <input type="text" class="b-input">
-        <label for="cars">Choose a filter:</label>
-        <select name="filters" id="" class="b-filtersDropdwn">
-            <option value="type" class="">by type</option>
-            <option value="habitat" class="">by habitat</option>
+        <div class="b-title">
+            <img src="https://archives.bulbagarden.net/media/upload/4/4b/Pok%C3%A9dex_logo.png" alt="pokedex-image" class="b-title_image">
+        </div>
+        <div class="b-input">
+            <input type="text" placeholder="e.g. Bulbasaur" class="b-input__bar">
 
-        </select>
-        <div class="b-filter" id="filter"></div>
-        <div class="b-filter" id="filterColor"></div>
-        <button class="b-buttonClear">Clear</button>
-        <ol class="b-gallery" id="pokedex">
+        </div>
 
-        </ol>
+        <div class="b-menuFilter">
+            <select class="b-filtersDropdwn" name="filters" id="">
+                <option value="type" class="">Filter by type</option>
+                <option value="habitat" class="">Filter by habitat</option>
+            </select>
+            <button class="b-button b-button__clear" id="buttonClear">Clear</button>
+        </div>
+        <div class="b-menuFilter">
+            <div class="b-filter__byText" id="filterText"></div>
+            <div class="b-filter__byText" id="filterColor"></div>
+        </div>
+
+        <ol class="b-gallery b-transition" id="pokedex"></ol>
+
+        <div class="b-modal-hidden"></div>
+        <div class="b-overlay-hidden"></div>
     </div>
 </body>
 </html>
