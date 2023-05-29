@@ -77,8 +77,9 @@ const init = async () => {
 
     // clear filter button
     buttonClear$$.addEventListener("click", () => {
-        printPokemon(pokemons);
         printPropFilter("type", pokemons); 
+        pokemonsFiltered = pokemons;
+        printPokemon(pokemons);
     });
 }
 const createPokemonObj = (pokemonsList) => {
