@@ -26,7 +26,7 @@ const init = async () => {
     const pokemons = createPokemonObj(pokemonsList);
     pokemonsFiltered = pokemons;
 
-    // get colors and its species
+    // get colors and their species
     try { 
         const resColor = await fetch (colorsUrl);
         const resColorJson = await resColor.json();
@@ -43,7 +43,7 @@ const init = async () => {
     }
 
 
-    // get habitats and its species
+    // get habitats and their species
     try { 
         const resHabit = await fetch (habitatsUrl);
         const resHabitJson = await resHabit.json();
@@ -56,6 +56,7 @@ const init = async () => {
         console.log(error);
     }
 
+    // print filters when clicking in dropdown
     dropDown$$.addEventListener("change", () => {
         const typFilter = event.target.value;
         if (typFilter === "type") {
@@ -74,10 +75,10 @@ const init = async () => {
     
     printPokemon(pokemons);
 
-
+    // clear filter button
     buttonClear$$.addEventListener("click", () => {
         printPokemon(pokemons);
-
+        printPropFilter("type", pokemons); 
     });
 }
 const createPokemonObj = (pokemonsList) => {
@@ -94,7 +95,7 @@ const createPokemonObj = (pokemonsList) => {
     return pokemons;
 }
 const addProperty = (propName, prop, resColorPkmJson, pokemons) => {
-
+    // add pokemon property to pokemon object (color or habitat)
     pkmSpecies = resColorPkmJson.pokemon_species.map((specie) => specie.name);
 
     for (const pkm of pokemons) {
@@ -106,7 +107,7 @@ const addProperty = (propName, prop, resColorPkmJson, pokemons) => {
 }
 
 const printColors = (prop, pokemons) => {
-
+    // print color filter
     //add filter div
     const colordiv$$ = document.createElement("div");
     colordiv$$.classList.add("b-filter__colorPoint");
@@ -156,7 +157,7 @@ const printPropFilter = (propName, pokemons) => {
 
         typButt$$.addEventListener("click", () => {
             typButt$$.style.backgroundColor = "grey";
-            handlerClickType( typButt$$, propName, pokemons)
+            handlerClickType( typButt$$, propName)
         });
 
     }  
@@ -181,10 +182,10 @@ const handlerInputSearch = (pokemons) => {
     printPokemon(pokemonsFiltered);
 }
 
-const handlerClickType = (typButt$$, propName, pokemons) => {
+const handlerClickType = (typButt$$, propName) => {
     let propValName = event.target.innerHTML;
     console.log(propValName);
-    pokemonsFiltered = pokemons.filter((pokem) => pokem[propName].includes(propValName))
+    pokemonsFiltered = pokemonsFiltered.filter((pokem) => pokem[propName].includes(propValName))
     printPokemon(pokemonsFiltered);
     typButt$$.addEventListener("click", () => {
         typButt$$.style.backgroundColor = "grey";
@@ -200,7 +201,7 @@ window.onclick = function(event) {
     }
   }
 
-function addTransition(div$$) {
+const addTransition = (div$$) => {
     div$$.classList.add("b-transition")
 setTimeout(() => {
     div$$.classList.remove("b-transition")
